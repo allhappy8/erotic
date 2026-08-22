@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>パーツプレビュー</title>
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   トークン
+   ============================================================ */
+:root{
+  --ink:        #12192B;
+  --ink-mute:   #5A6478;
+  --paper:      #F3F5F8;
+  --card:       #FFFFFF;
+  --line:       #DCE1EA;
+  --accent:     #1F5EFF;
+  --danger:     #C2410C;
+
+  --font-body: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --wrap: 880px;
+  --radius: 10px;
+
+  /* 動画の縦横比。縦動画=9/16、横動画にしたい場合は 16/9 に変更 */
+  --video-ratio: 9 / 16;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ -webkit-text-size-adjust:100%; }
+
+body{
+  margin:0;
+  background:var(--paper);
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:15px;
+  line-height:1.9;
+  letter-spacing:.01em;
+}
+
+.wrap{
+  width:100%;
+  max-width:var(--wrap);
+  margin-inline:auto;
+  padding:0 20px;
+}
+
+/* ============================================================
+   ヘッダー
+   ============================================================ */
+.masthead{ padding:48px 0 28px; }
+.masthead h1{
+  margin:6px 0 0;
+  font-size:22px;
+  font-weight:700;
+  letter-spacing:.02em;
+}
+.masthead p{
+  margin:8px 0 0;
+  color:var(--ink-mute);
+  font-size:13px;
+}
+
+.marker{
+  margin:0;
+  font-family:var(--font-mono);
+  font-size:12px;
+  font-weight:500;
+  color:var(--accent);
+  letter-spacing:.04em;
+}
+
+/* ============================================================
+   説明ボックス（目安300文字）
+   ============================================================ */
+.note{
+  margin:0 0 28px;
+  padding:22px 24px 18px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-left:3px solid var(--accent);
+  border-radius:var(--radius);
+}
+.note .marker{ margin-bottom:10px; }
+
+.note-body{
+  margin:0;
+  font-size:14.5px;
+  line-height:2.05;
+}
+
+.note-foot{
+  display:flex;
+  justify-content:flex-end;
+  margin-top:14px;
+  padding-top:12px;
+  border-top:1px dashed var(--line);
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--ink-mute);
+}
+
+/* ============================================================
+   HTMLソース差し込みエリア
+   ============================================================ */
+.stage{
+  margin:0 0 56px;
+  padding:24px;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+}
+.stage > .marker{ margin-bottom:16px; }
+
+/* ============================================================
+   動画ブロック（3列 × テキスト入力）
+   ============================================================ */
+.video-block{
+  padding-top:16px;
+  border-top:1px dashed var(--line);
+  margin-top:20px;
+}
+.video-block:first-child{
+  padding-top:0;
+  border-top:0;
+  margin-top:0;
+}
+
+.block-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:10px;
+}
+.block-no{
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--ink-mute);
+  letter-spacing:.08em;
+}
+
+.btn-del{
+  appearance:none;
+  border:1px solid var(--line);
+  background:transparent;
+  color:var(--ink-mute);
+  font-family:var(--font-mono);
+  font-size:11px;
+  line-height:1;
+  padding:7px 10px;
+  border-radius:6px;
+  cursor:pointer;
+}
+.btn-del:hover{ border-color:var(--danger); color:var(--danger); }
+.btn-del:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+/* SPでも必ず3列 */
+.video-row{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:10px;
+  margin:0;
+  padding:0;
+  list-style:none;
+}
+
+.video-cell{
+  position:relative;
+  aspect-ratio:var(--video-ratio);
+  overflow:hidden;
+  border-radius:8px;
+  background:#0C1120;
+}
+.video-cell > video,
+.video-cell > iframe,
+.video-cell > img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  object-fit:cover;
+  display:block;
+}
+
+/* 各動画の下のテキスト挿入ボックス */
+.cell-text{
+  display:block;
+  width:100%;
+  margin-top:8px;
+  padding:8px 9px;
+  min-height:64px;
+  resize:vertical;
+  border:1px solid var(--line);
+  border-radius:6px;
+  background:#FBFCFE;
+  color:var(--ink);
+  font-family:var(--font-body);
+  font-size:11.5px;
+  line-height:1.7;
+}
+.cell-text:focus{
+  outline:none;
+  border-color:var(--accent);
+  background:#fff;
+}
+.cell-text::placeholder{ color:#A6AEBE; }
+
+/* ============================================================
+   追加ボタン（ブロック群の左下）
+   ============================================================ */
+.stage-actions{
+  display:flex;
+  justify-content:flex-start;   /* 左下に配置 */
+  margin-top:22px;
+  padding-top:16px;
+  border-top:1px solid var(--line);
+}
+
+.btn-add{
+  appearance:none;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  border:1px solid var(--accent);
+  background:var(--accent);
+  color:#fff;
+  font-family:var(--font-body);
+  font-size:13px;
+  font-weight:500;
+  line-height:1;
+  padding:13px 18px;
+  border-radius:8px;
+  cursor:pointer;
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .12s ease, opacity .12s ease;
+}
+.btn-add:hover{ opacity:.88; }
+.btn-add:active{ transform:translateY(1px); }
+.btn-add:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
+.btn-add .plus{ font-size:16px; line-height:1; }
+
+/* 追加直後のフェードイン */
+@keyframes blockIn{
+  from{ opacity:0; transform:translateY(6px); }
+  to{   opacity:1; transform:none; }
+}
+.video-block.is-new{ animation:blockIn .22s ease-out; }
+
+@media (max-width:420px){
+  .video-row{ gap:6px; }
+  .cell-text{ font-size:11px; padding:7px; min-height:58px; }
+  .stage{ padding:18px 14px; }
+}
+
+/* ============================================================
+   フッター
+   ============================================================ */
+.foot{
+  padding:0 0 56px;
+  font-family:var(--font-mono);
+  font-size:11px;
+  color:var(--ink-mute);
+}
+
+@media (prefers-reduced-motion:reduce){
+  *{ animation:none !important; transition:none !important; }
+}
+</style>
+</head>
+
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <p class="marker">&lt;!-- preview --&gt;</p>
+    <h1>パーツプレビュー</h1>
+    <p>ページタイトルはここを書き換えてください。</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- ==========================================================
+       (1) 説明ボックス（300文字目安）
+       <p class="note-body"> の中身だけ書き換えます。
+       ========================================================== -->
+  <section class="note">
+    <p class="marker">&lt;!-- description --&gt;</p>
+    <p class="note-body" id="noteBody">このボックスには、下に表示しているHTMLソースについての説明を入れます。何を目的に作ったパーツなのか、どのページのどの位置で使うのか、実装するときに注意する点は何か。読む人が迷わない順番で書いておくと、あとから見返したときに役立ちます。目安は300文字程度で、全角300文字はおおよそこのくらいの分量になり、3〜4文でまとまります。これより長くなってもボックスの高さが自動で伸びるため、レイアウトは崩れません。編集するときは index.html の「説明ボックス」ブロックを書き換えてください。</p>
+    <p class="note-foot"><span id="noteCount">0</span> / 300 字</p>
+  </section>
+
+  <!-- ==========================================================
+       (2) HTMLソース差し込みエリア
+       ブロックの中身は下の <template id="blockTpl"> を編集すると
+       既存ぶん・追加ぶんの両方に反映されます。
+       ========================================================== -->
+  <section class="stage">
+    <p class="marker">&lt;!-- source --&gt;</p>
+
+    <!-- ================= STAGE START ================= -->
+    <div class="blocks" id="blocks"><!-- ブロックはJSで生成 --></div>
+
+    <div class="stage-actions">
+      <button type="button" class="btn-add" id="btnAdd">
+        <span class="plus" aria-hidden="true">＋</span>動画ブロックを追加
+      </button>
+    </div>
+    <!-- ================== STAGE END ================== -->
+
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">&lt;!-- end --&gt;</div>
+</footer>
+
+<!-- ============================================================
+     複製のもとになるブロック。
+     ・自前mp4  → <video> の src / poster を差し替え
+     ・YouTube → <video>…</video> を丸ごと下記に置き換え
+        <iframe src="https://www.youtube.com/embed/【動画ID】"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+                allowfullscreen></iframe>
+     ============================================================ -->
+<template id="blockTpl">
+  <section class="video-block">
+    <div class="block-head">
+      <span class="block-no"></span>
+      <button type="button" class="btn-del">削除</button>
+    </div>
+    <ul class="video-row">
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-01.mp4" poster="videos/thumb-01.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <textarea class="cell-text" rows="3" placeholder="テキストを入力"></textarea>
+      </li>
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-02.mp4" poster="videos/thumb-02.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <textarea class="cell-text" rows="3" placeholder="テキストを入力"></textarea>
+      </li>
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-03.mp4" poster="videos/thumb-03.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <textarea class="cell-text" rows="3" placeholder="テキストを入力"></textarea>
+      </li>
+    </ul>
+  </section>
+</template>
+
+<script>
+(function () {
+  'use strict';
+
+  /* --- 説明ボックスの文字数カウンタ ------------------------- */
+  var noteBody  = document.getElementById('noteBody');
+  var noteCount = document.getElementById('noteCount');
+  if (noteBody && noteCount) {
+    var len = noteBody.textContent.replace(/\s+/g, '').length;
+    noteCount.textContent = len;
+    if (len > 300) noteCount.parentElement.style.color = '#C2410C';
+  }
+
+  /* --- 動画ブロックの追加・削除 ----------------------------- */
+  var tpl    = document.getElementById('blockTpl');
+  var blocks = document.getElementById('blocks');
+  var btnAdd = document.getElementById('btnAdd');
+  if (!tpl || !blocks || !btnAdd) return;
+
+  function renumber() {
+    var list = blocks.querySelectorAll('.video-block');
+    Array.prototype.forEach.call(list, function (el, i) {
+      el.querySelector('.block-no').textContent =
+        'BLOCK ' + String(i + 1).padStart(2, '0');
+      // ブロックが1つだけのときは削除ボタンを隠す
+      el.querySelector('.btn-del').hidden = (list.length === 1);
+    });
+  }
+
+  function addBlock(focus) {
+    var node = tpl.content.cloneNode(true).querySelector('.video-block');
+    blocks.appendChild(node);
+    renumber();
+    if (focus) {
+      node.classList.add('is-new');
+      node.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      var first = node.querySelector('.cell-text');
+      if (first) first.focus({ preventScroll: true });
+    }
+    return node;
+  }
+
+  btnAdd.addEventListener('click', function () { addBlock(true); });
+
+  blocks.addEventListener('click', function (e) {
+    var del = e.target.closest('.btn-del');
+    if (!del) return;
+    var block = del.closest('.video-block');
+    var filled = Array.prototype.some.call(
+      block.querySelectorAll('.cell-text'),
+      function (t) { return t.value.trim() !== ''; }
+    );
+    if (filled && !window.confirm('入力したテキストごと削除します。よろしいですか？')) return;
+    block.remove();
+    renumber();
+  });
+
+  // 初期表示：1ブロック
+  addBlock(false);
+})();
+</script>
+
+</body>
+</html>
