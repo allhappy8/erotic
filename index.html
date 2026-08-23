@@ -21,7 +21,6 @@
   --card:       #FFFFFF;
   --line:       #DCE1EA;
   --accent:     #1F5EFF;
-  --danger:     #C2410C;
 
   --font-body: "Noto Sans JP", -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
@@ -29,8 +28,12 @@
   --wrap: 880px;
   --radius: 10px;
 
-  /* 動画の縦横比。縦動画=9/16、横動画にしたい場合は 16/9 に変更 */
+  /* 動画の縦横比。縦動画=9/16、横動画にしたい場合は 16/9 */
   --video-ratio: 9 / 16;
+
+  /* 動画どうしの間隔（縦 / 横） */
+  --gap-row: 26px;
+  --gap-col: 10px;
 }
 
 *,*::before,*::after{ box-sizing:border-box; }
@@ -121,52 +124,13 @@ body{
 .stage > .marker{ margin-bottom:16px; }
 
 /* ============================================================
-   動画ブロック（3列 × テキスト入力）
+   動画グリッド
+   3列固定。<li> を足すだけで 2段目・3段目…と折り返す
    ============================================================ */
-.video-block{
-  padding-top:16px;
-  border-top:1px dashed var(--line);
-  margin-top:20px;
-}
-.video-block:first-child{
-  padding-top:0;
-  border-top:0;
-  margin-top:0;
-}
-
-.block-head{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:10px;
-}
-.block-no{
-  font-family:var(--font-mono);
-  font-size:11px;
-  color:var(--ink-mute);
-  letter-spacing:.08em;
-}
-
-.btn-del{
-  appearance:none;
-  border:1px solid var(--line);
-  background:transparent;
-  color:var(--ink-mute);
-  font-family:var(--font-mono);
-  font-size:11px;
-  line-height:1;
-  padding:7px 10px;
-  border-radius:6px;
-  cursor:pointer;
-}
-.btn-del:hover{ border-color:var(--danger); color:var(--danger); }
-.btn-del:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
-
-/* SPでも必ず3列 */
 .video-row{
   display:grid;
-  grid-template-columns:repeat(3, 1fr);
-  gap:10px;
+  grid-template-columns:repeat(3, 1fr);   /* SP・PC ともに3列固定 */
+  gap:var(--gap-row) var(--gap-col);
   margin:0;
   padding:0;
   list-style:none;
@@ -191,73 +155,20 @@ body{
   display:block;
 }
 
-/* 各動画の下のテキスト挿入ボックス */
+/* 各動画の下のテキスト（ソース内で編集） */
 .cell-text{
-  display:block;
-  width:100%;
-  margin-top:8px;
-  padding:8px 9px;
-  min-height:64px;
-  resize:vertical;
-  border:1px solid var(--line);
+  margin:8px 0 0;
+  padding:9px 10px;
+  background:#F7F9FC;
   border-radius:6px;
-  background:#FBFCFE;
-  color:var(--ink);
-  font-family:var(--font-body);
   font-size:11.5px;
-  line-height:1.7;
+  line-height:1.75;
+  color:var(--ink);
 }
-.cell-text:focus{
-  outline:none;
-  border-color:var(--accent);
-  background:#fff;
-}
-.cell-text::placeholder{ color:#A6AEBE; }
-
-/* ============================================================
-   追加ボタン（ブロック群の左下）
-   ============================================================ */
-.stage-actions{
-  display:flex;
-  justify-content:flex-start;   /* 左下に配置 */
-  margin-top:22px;
-  padding-top:16px;
-  border-top:1px solid var(--line);
-}
-
-.btn-add{
-  appearance:none;
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  border:1px solid var(--accent);
-  background:var(--accent);
-  color:#fff;
-  font-family:var(--font-body);
-  font-size:13px;
-  font-weight:500;
-  line-height:1;
-  padding:13px 18px;
-  border-radius:8px;
-  cursor:pointer;
-  -webkit-tap-highlight-color:transparent;
-  transition:transform .12s ease, opacity .12s ease;
-}
-.btn-add:hover{ opacity:.88; }
-.btn-add:active{ transform:translateY(1px); }
-.btn-add:focus-visible{ outline:2px solid var(--ink); outline-offset:2px; }
-.btn-add .plus{ font-size:16px; line-height:1; }
-
-/* 追加直後のフェードイン */
-@keyframes blockIn{
-  from{ opacity:0; transform:translateY(6px); }
-  to{   opacity:1; transform:none; }
-}
-.video-block.is-new{ animation:blockIn .22s ease-out; }
 
 @media (max-width:420px){
-  .video-row{ gap:6px; }
-  .cell-text{ font-size:11px; padding:7px; min-height:58px; }
+  :root{ --gap-row:20px; --gap-col:6px; }
+  .cell-text{ font-size:11px; padding:7px 8px; line-height:1.7; }
   .stage{ padding:18px 14px; }
 }
 
@@ -300,21 +211,100 @@ body{
   </section>
 
   <!-- ==========================================================
-       (2) HTMLソース差し込みエリア
-       ブロックの中身は下の <template id="blockTpl"> を編集すると
-       既存ぶん・追加ぶんの両方に反映されます。
+       (2) 動画グリッド
+
+       増やし方：<li> … </li> を1つコピーして下に足すだけ。
+                 3つごとに自動で次の段へ折り返します。
+                 3の倍数でなくても崩れません。
+
+       差し替える箇所は <li> の中の3つ：
+         ・video の src      … 動画ファイル
+         ・video の poster   … サムネイル画像
+         ・p.cell-text の中身 … 動画下のテキスト（改行は <br>）
+
+       YouTube を使う場合は <video>…</video> を丸ごと置き換え：
+         <iframe src="https://www.youtube.com/embed/【動画ID】"
+                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+                 allowfullscreen></iframe>
        ========================================================== -->
   <section class="stage">
     <p class="marker">&lt;!-- source --&gt;</p>
 
     <!-- ================= STAGE START ================= -->
-    <div class="blocks" id="blocks"><!-- ブロックはJSで生成 --></div>
+    <ul class="video-row">
 
-    <div class="stage-actions">
-      <button type="button" class="btn-add" id="btnAdd">
-        <span class="plus" aria-hidden="true">＋</span>動画ブロックを追加
-      </button>
-    </div>
+      <!-- ---------- 1段目 ---------- -->
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-01.mp4" poster="videos/thumb-01.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <p class="cell-text">1本目の説明テキスト。ここはソース内で直接書き換えます。</p>
+      </li>
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-02.mp4" poster="videos/thumb-02.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <p class="cell-text">2本目の説明テキスト。長さが違っても幅は揃います。</p>
+      </li>
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-03.mp4" poster="videos/thumb-03.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <p class="cell-text">3本目の説明テキスト。<br>改行は br で入れられます。</p>
+      </li>
+
+      <!-- ---------- 2段目 ---------- -->
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-04.mp4" poster="videos/thumb-04.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <p class="cell-text">4本目の説明テキスト。</p>
+      </li>
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-05.mp4" poster="videos/thumb-05.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <p class="cell-text">5本目の説明テキスト。</p>
+      </li>
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-06.mp4" poster="videos/thumb-06.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <p class="cell-text">6本目の説明テキスト。</p>
+      </li>
+
+      <!-- ---------- 3段目 ---------- -->
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-07.mp4" poster="videos/thumb-07.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <p class="cell-text">7本目の説明テキスト。</p>
+      </li>
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-08.mp4" poster="videos/thumb-08.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <p class="cell-text">8本目の説明テキスト。</p>
+      </li>
+      <li>
+        <div class="video-cell">
+          <video src="videos/movie-09.mp4" poster="videos/thumb-09.jpg"
+                 muted loop playsinline preload="metadata" controls></video>
+        </div>
+        <p class="cell-text">9本目の説明テキスト。</p>
+      </li>
+
+      <!-- 4段目以降は、この下に <li> を足していくだけ -->
+
+    </ul>
     <!-- ================== STAGE END ================== -->
 
   </section>
@@ -325,105 +315,15 @@ body{
   <div class="wrap">&lt;!-- end --&gt;</div>
 </footer>
 
-<!-- ============================================================
-     複製のもとになるブロック。
-     ・自前mp4  → <video> の src / poster を差し替え
-     ・YouTube → <video>…</video> を丸ごと下記に置き換え
-        <iframe src="https://www.youtube.com/embed/【動画ID】"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
-                allowfullscreen></iframe>
-     ============================================================ -->
-<template id="blockTpl">
-  <section class="video-block">
-    <div class="block-head">
-      <span class="block-no"></span>
-      <button type="button" class="btn-del">削除</button>
-    </div>
-    <ul class="video-row">
-      <li>
-        <div class="video-cell">
-          <video src="videos/movie-01.mp4" poster="videos/thumb-01.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
-        </div>
-        <textarea class="cell-text" rows="3" placeholder="テキストを入力"></textarea>
-      </li>
-      <li>
-        <div class="video-cell">
-          <video src="videos/movie-02.mp4" poster="videos/thumb-02.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
-        </div>
-        <textarea class="cell-text" rows="3" placeholder="テキストを入力"></textarea>
-      </li>
-      <li>
-        <div class="video-cell">
-          <video src="videos/movie-03.mp4" poster="videos/thumb-03.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
-        </div>
-        <textarea class="cell-text" rows="3" placeholder="テキストを入力"></textarea>
-      </li>
-    </ul>
-  </section>
-</template>
-
 <script>
+// 説明ボックスの文字数カウンタ（表示のみ・改行と空白は除外）
 (function () {
-  'use strict';
-
-  /* --- 説明ボックスの文字数カウンタ ------------------------- */
-  var noteBody  = document.getElementById('noteBody');
-  var noteCount = document.getElementById('noteCount');
-  if (noteBody && noteCount) {
-    var len = noteBody.textContent.replace(/\s+/g, '').length;
-    noteCount.textContent = len;
-    if (len > 300) noteCount.parentElement.style.color = '#C2410C';
-  }
-
-  /* --- 動画ブロックの追加・削除 ----------------------------- */
-  var tpl    = document.getElementById('blockTpl');
-  var blocks = document.getElementById('blocks');
-  var btnAdd = document.getElementById('btnAdd');
-  if (!tpl || !blocks || !btnAdd) return;
-
-  function renumber() {
-    var list = blocks.querySelectorAll('.video-block');
-    Array.prototype.forEach.call(list, function (el, i) {
-      el.querySelector('.block-no').textContent =
-        'BLOCK ' + String(i + 1).padStart(2, '0');
-      // ブロックが1つだけのときは削除ボタンを隠す
-      el.querySelector('.btn-del').hidden = (list.length === 1);
-    });
-  }
-
-  function addBlock(focus) {
-    var node = tpl.content.cloneNode(true).querySelector('.video-block');
-    blocks.appendChild(node);
-    renumber();
-    if (focus) {
-      node.classList.add('is-new');
-      node.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      var first = node.querySelector('.cell-text');
-      if (first) first.focus({ preventScroll: true });
-    }
-    return node;
-  }
-
-  btnAdd.addEventListener('click', function () { addBlock(true); });
-
-  blocks.addEventListener('click', function (e) {
-    var del = e.target.closest('.btn-del');
-    if (!del) return;
-    var block = del.closest('.video-block');
-    var filled = Array.prototype.some.call(
-      block.querySelectorAll('.cell-text'),
-      function (t) { return t.value.trim() !== ''; }
-    );
-    if (filled && !window.confirm('入力したテキストごと削除します。よろしいですか？')) return;
-    block.remove();
-    renumber();
-  });
-
-  // 初期表示：1ブロック
-  addBlock(false);
+  var body  = document.getElementById('noteBody');
+  var count = document.getElementById('noteCount');
+  if (!body || !count) return;
+  var len = body.textContent.replace(/\s+/g, '').length;
+  count.textContent = len;
+  if (len > 300) count.parentElement.style.color = '#C2410C';
 })();
 </script>
 
