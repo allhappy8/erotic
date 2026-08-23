@@ -59,71 +59,15 @@ body{
 }
 
 /* ============================================================
-   ヘッダー
-   ============================================================ */
-.masthead{ padding:48px 0 28px; }
-.masthead h1{
-  margin:6px 0 0;
-  font-size:22px;
-  font-weight:700;
-  letter-spacing:.02em;
-}
-.masthead p{
-  margin:8px 0 0;
-  color:var(--ink-mute);
-  font-size:13px;
-}
-
-.marker{
-  margin:0;
-  font-family:var(--font-mono);
-  font-size:12px;
-  font-weight:500;
-  color:var(--accent);
-  letter-spacing:.04em;
-}
-
-/* ============================================================
-   説明ボックス（目安300文字）
-   ============================================================ */
-.note{
-  margin:0 0 28px;
-  padding:22px 24px 18px;
-  background:var(--card);
-  border:1px solid var(--line);
-  border-left:3px solid var(--accent);
-  border-radius:var(--radius);
-}
-.note .marker{ margin-bottom:10px; }
-
-.note-body{
-  margin:0;
-  font-size:14.5px;
-  line-height:2.05;
-}
-
-.note-foot{
-  display:flex;
-  justify-content:flex-end;
-  margin-top:14px;
-  padding-top:12px;
-  border-top:1px dashed var(--line);
-  font-family:var(--font-mono);
-  font-size:11px;
-  color:var(--ink-mute);
-}
-
-/* ============================================================
    HTMLソース差し込みエリア
    ============================================================ */
 .stage{
-  margin:0 0 56px;
+  margin:40px 0 56px;
   padding:24px;
   background:var(--card);
   border:1px solid var(--line);
   border-radius:var(--radius);
 }
-.stage > .marker{ margin-bottom:16px; }
 
 /* ============================================================
    動画グリッド
@@ -192,28 +136,10 @@ body{
 
 <body>
 
-<header class="masthead">
-  <div class="wrap">
-    <p class="marker">&lt;!-- preview --&gt;</p>
-    <h1>パーツプレビュー</h1>
-    <p>ページタイトルはここを書き換えてください。</p>
-  </div>
-</header>
-
 <main class="wrap">
 
   <!-- ==========================================================
-       (1) 説明ボックス（300文字目安）
-       <p class="note-body"> の中身だけ書き換えます。
-       ========================================================== -->
-  <section class="note">
-    <p class="marker">&lt;!-- description --&gt;</p>
-    <p class="note-body" id="noteBody">このボックスには、下に表示しているHTMLソースについての説明を入れます。何を目的に作ったパーツなのか、どのページのどの位置で使うのか、実装するときに注意する点は何か。読む人が迷わない順番で書いておくと、あとから見返したときに役立ちます。目安は300文字程度で、全角300文字はおおよそこのくらいの分量になり、3〜4文でまとまります。これより長くなってもボックスの高さが自動で伸びるため、レイアウトは崩れません。編集するときは index.html の「説明ボックス」ブロックを書き換えてください。</p>
-    <p class="note-foot"><span id="noteCount">0</span> / 300 字</p>
-  </section>
-
-  <!-- ==========================================================
-       (2) 動画グリッド
+       動画グリッド
 
        増やし方：<li> … </li> を1つコピーして下に足すだけ。
                  3つごとに自動で次の段へ折り返します。
@@ -232,7 +158,6 @@ body{
           読み込みが速くなります。
        ========================================================== -->
   <section class="stage">
-    <p class="marker">&lt;!-- source --&gt;</p>
 
     <!-- ================= STAGE START ================= -->
     <ul class="video-row">
@@ -318,18 +243,6 @@ body{
 <footer class="foot">
   <div class="wrap">&lt;!-- end --&gt;</div>
 </footer>
-
-<script>
-// 説明ボックスの文字数カウンタ（表示のみ・改行と空白は除外）
-(function () {
-  var body  = document.getElementById('noteBody');
-  var count = document.getElementById('noteCount');
-  if (!body || !count) return;
-  var len = body.textContent.replace(/\s+/g, '').length;
-  count.textContent = len;
-  if (len > 300) count.parentElement.style.color = '#C2410C';
-})();
-</script>
 
 </body>
 </html>
