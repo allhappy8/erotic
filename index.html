@@ -28,8 +28,10 @@
   --wrap: 880px;
   --radius: 10px;
 
-  /* 動画の縦横比。縦動画=9/16、横動画にしたい場合は 16/9 */
-  --video-ratio: 9 / 16;
+  /* 動画の縦横比。
+     DMMサンプル再生プレイヤー（padding-top:75%）＝ 4 / 3
+     16:9の動画なら 16 / 9、縦動画なら 9 / 16 */
+  --video-ratio: 4 / 3;
 
   /* 動画どうしの間隔（縦 / 横） */
   --gap-row: 26px;
@@ -215,17 +217,19 @@ body{
 
        増やし方：<li> … </li> を1つコピーして下に足すだけ。
                  3つごとに自動で次の段へ折り返します。
-                 3の倍数でなくても崩れません。
 
-       差し替える箇所は <li> の中の3つ：
-         ・video の src      … 動画ファイル
-         ・video の poster   … サムネイル画像
-         ・p.cell-text の中身 … 動画下のテキスト（改行は <br>）
+       差し替える箇所は <li> の中の2つ：
+         ・iframe の src の cid=●●●●●  … 作品ID
+         ・p.cell-text の中身            … 動画下のテキスト（改行は <br>）
 
-       YouTube を使う場合は <video>…</video> を丸ごと置き換え：
-         <iframe src="https://www.youtube.com/embed/【動画ID】"
-                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
-                 allowfullscreen></iframe>
+       ※ 元の <div style="padding-top:75%; position:relative;"> の
+          ラッパーは不要です。.video-cell が同じ役割（比率の固定）を
+          担っているため、iframe を直接入れれば枠にぴったり収まります。
+          比率は :root の --video-ratio で一括変更できます。
+
+       ※ プレイヤーの解像度は src の size= で変えられます。
+          3列表示だと1枠が小さいため、size=560_360 など軽いサイズの方が
+          読み込みが速くなります。
        ========================================================== -->
   <section class="stage">
     <p class="marker">&lt;!-- source --&gt;</p>
@@ -236,22 +240,22 @@ body{
       <!-- ---------- 1段目 ---------- -->
       <li>
         <div class="video-cell">
-          <video src="videos/movie-01.mp4" poster="videos/thumb-01.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/cid=ksat00102/size=1280_720/"
+                  scrolling="no" frameborder="0" allowfullscreen loading="lazy"></iframe>
         </div>
         <p class="cell-text">1本目の説明テキスト。ここはソース内で直接書き換えます。</p>
       </li>
       <li>
         <div class="video-cell">
-          <video src="videos/movie-02.mp4" poster="videos/thumb-02.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/cid=ksat00102/size=1280_720/"
+                  scrolling="no" frameborder="0" allowfullscreen loading="lazy"></iframe>
         </div>
         <p class="cell-text">2本目の説明テキスト。長さが違っても幅は揃います。</p>
       </li>
       <li>
         <div class="video-cell">
-          <video src="videos/movie-03.mp4" poster="videos/thumb-03.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/cid=ksat00102/size=1280_720/"
+                  scrolling="no" frameborder="0" allowfullscreen loading="lazy"></iframe>
         </div>
         <p class="cell-text">3本目の説明テキスト。<br>改行は br で入れられます。</p>
       </li>
@@ -259,22 +263,22 @@ body{
       <!-- ---------- 2段目 ---------- -->
       <li>
         <div class="video-cell">
-          <video src="videos/movie-04.mp4" poster="videos/thumb-04.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/cid=ksat00102/size=1280_720/"
+                  scrolling="no" frameborder="0" allowfullscreen loading="lazy"></iframe>
         </div>
         <p class="cell-text">4本目の説明テキスト。</p>
       </li>
       <li>
         <div class="video-cell">
-          <video src="videos/movie-05.mp4" poster="videos/thumb-05.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/cid=ksat00102/size=1280_720/"
+                  scrolling="no" frameborder="0" allowfullscreen loading="lazy"></iframe>
         </div>
         <p class="cell-text">5本目の説明テキスト。</p>
       </li>
       <li>
         <div class="video-cell">
-          <video src="videos/movie-06.mp4" poster="videos/thumb-06.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/cid=ksat00102/size=1280_720/"
+                  scrolling="no" frameborder="0" allowfullscreen loading="lazy"></iframe>
         </div>
         <p class="cell-text">6本目の説明テキスト。</p>
       </li>
@@ -282,22 +286,22 @@ body{
       <!-- ---------- 3段目 ---------- -->
       <li>
         <div class="video-cell">
-          <video src="videos/movie-07.mp4" poster="videos/thumb-07.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/cid=ksat00102/size=1280_720/"
+                  scrolling="no" frameborder="0" allowfullscreen loading="lazy"></iframe>
         </div>
         <p class="cell-text">7本目の説明テキスト。</p>
       </li>
       <li>
         <div class="video-cell">
-          <video src="videos/movie-08.mp4" poster="videos/thumb-08.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/cid=ksat00102/size=1280_720/"
+                  scrolling="no" frameborder="0" allowfullscreen loading="lazy"></iframe>
         </div>
         <p class="cell-text">8本目の説明テキスト。</p>
       </li>
       <li>
         <div class="video-cell">
-          <video src="videos/movie-09.mp4" poster="videos/thumb-09.jpg"
-                 muted loop playsinline preload="metadata" controls></video>
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/cid=ksat00102/size=1280_720/"
+                  scrolling="no" frameborder="0" allowfullscreen loading="lazy"></iframe>
         </div>
         <p class="cell-text">9本目の説明テキスト。</p>
       </li>
