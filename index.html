@@ -89,9 +89,9 @@ body{
   border-radius:8px;
   background:#0C1120;
 }
-.video-cell > video,
-.video-cell > iframe,
-.video-cell > img{
+.video-cell video,
+.video-cell iframe,
+.video-cell img{
   position:absolute;
   inset:0;
   width:100%;
@@ -99,6 +99,13 @@ body{
   border:0;
   object-fit:cover;
   display:block;
+}
+/* MGS のサンプル動画スクリプトが吐き出すラッパー div を枠いっぱいに */
+.video-cell > div{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
 }
 
 /* 各動画の下のテキスト（ソース内で編集） */
@@ -188,10 +195,9 @@ body{
       <!-- ---------- 2段目 ---------- -->
       <li>
         <div class="video-cell">
-          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/cid=nagst00026/size=1280_720/"
-                  scrolling="no" frameborder="0" allowfullscreen loading="lazy"></iframe>
+          <script type="text/javascript" charset="utf-8" src="https://www.mgstage.com/js/mgs_sample_movie.js?p=ABF-378&amp;r=1&amp;c=XZ4I8TM2JZKYADNNPGXZCNSA8M"></script>
         </div>
-        <p class="cell-text">【配信限定】抱き心地のいいムッチリ若妻<br>水瀬さな ベスト</p>
+        <p class="cell-text">俺に沼ってる最高の女。<br>-男本位の避妊なし中出しSEX- 河合あすな</p>
       </li>
       <li>
         <div class="video-cell">
