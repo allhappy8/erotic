@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>パーツプレビュー</title>
+<title>新着サンプル動画まとめ</title>
 <meta name="robots" content="noindex">
 <!-- サンプル動画のサーバーはリファラを見て弾くことがあるため、必ず送る設定にしておく -->
 <meta name="referrer" content="no-referrer-when-downgrade">
@@ -32,7 +32,8 @@
 
   /* 動画の縦横比。
      DMMサンプル再生プレイヤー（padding-top:75%）＝ 4 / 3
-     16:9の動画なら 16 / 9、縦動画なら 9 / 16 */
+     16:9の動画なら 16 / 9、縦動画なら 9 / 16
+     正本: knowledge/config.json の player.video_ratio */
   --video-ratio: 4 / 3;
 
   /* 動画どうしの間隔（縦 / 横） */
@@ -77,7 +78,7 @@ body{
    ============================================================ */
 .video-row{
   display:grid;
-  grid-template-columns:repeat(3, 1fr);   /* SP・PC ともに3列固定 */
+  grid-template-columns:repeat(3, 1fr);   /* SP・PC ともに列数固定 */
   gap:var(--gap-row) var(--gap-col);
   margin:0;
   padding:0;
@@ -110,7 +111,7 @@ body{
   height:100%;
 }
 
-/* 各動画の下のテキスト（ソース内で編集） */
+/* 各動画の下のテキスト */
 .cell-text{
   margin:8px 0 0;
   padding:9px 10px;
@@ -150,27 +151,15 @@ body{
   <!-- ==========================================================
        動画グリッド
 
-       増やし方：<li> … </li> を1つコピーして下に足すだけ。
-                 3つごとに自動で次の段へ折り返します。
-
-       差し替える箇所は <li> の中の2つ：
-         ・iframe の src の cid=●●●●●  … 作品ID
-         ・p.cell-text の中身            … 動画下のテキスト（改行は <br>）
-
-       ※ 元の <div style="padding-top:75%; position:relative;"> の
-          ラッパーは不要です。.video-cell が同じ役割（比率の固定）を
-          担っているため、iframe を直接入れれば枠にぴったり収まります。
-          比率は :root の --video-ratio で一括変更できます。
-
-       ※ プレイヤーの解像度は src の size= で変えられます。
-          3列表示だと1枠が小さいため、size=560_360 など軽いサイズの方が
-          読み込みが速くなります。
+       ★ この STAGE 区間は scripts/build.py が自動生成します。
+          手で編集しても次回の更新で上書きされます。
+          掲載内容を変えたいときは knowledge/config.json を編集してください。
 
        ★ affi_id について
-          src の「affi_id=NUBh0jCpE9kc-001」はDMMアフィリエイトIDです。
+          src の「affi_id=...」はDMMアフィリエイトIDです。
           ここが空・未設定だと、プレイヤーをクリックしたときの遷移先URLが
           不正になり「400 Bad Request」になります。消さないでください。
-          新しく <li> を足すときも、必ず同じ affi_id を入れること。
+          正本: knowledge/config.json の affiliate.affiliate_id
        ========================================================== -->
   <section class="stage">
 
@@ -180,88 +169,89 @@ body{
       <!-- ---------- 1段目 ---------- -->
       <li>
         <div class="video-cell">
-          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=snos00385/size=1280_720/"
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=sone00272/size=1280_720/"
                   scrolling="no" frameborder="0" allowfullscreen
                   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                   referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
         </div>
-        <p class="cell-text">おっぱいリモバイお散歩 Lcupデカ乳首に玩具ハメて公共の場を連れ回し！声出し厳禁、ビクビク喘ぎ、強●羞恥エクスタシー<br>木村愛心</p>
+        <p class="cell-text">年末年始、広い学生寮で女学生とおじさん管理人が2人きり… 禁断シチュに欲情した中年ち●ぽと寂しさ埋めたい若い少女おま●こは相性良すぎて合体し続けた。 浅野こころ<br>浅野こころ</p>
       </li>
       <li>
         <div class="video-cell">
-          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=mida00757/size=1280_720/"
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=midv00855/size=1280_720/"
                   scrolling="no" frameborder="0" allowfullscreen
                   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                   referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
         </div>
-        <p class="cell-text">ぜーんぶ初体験！！セックス開発3本番Special！！<br>七海まの</p>
+        <p class="cell-text">いつも標準語のひなの先生、欲情すると方言淫語で痴女ってきて僕の恋人が近くにいても14発搾精させてくる巨乳女教師 博多弁卑語NTR 九野ひなの<br>九野ひなの</p>
       </li>
       <li>
         <div class="video-cell">
-          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=ppbd00323/size=1280_720/"
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=oae00291/size=1280_720/"
                   scrolling="no" frameborder="0" allowfullscreen
                   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                   referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
         </div>
-        <p class="cell-text">彼女のお姉さんは巨乳と中出しOKで僕を誘惑<br>6タイトル大ボリューム8時間BEST vol.10</p>
+        <p class="cell-text">裸神 瀬戸環奈<br>瀬戸環奈</p>
       </li>
 
       <!-- ---------- 2段目 ---------- -->
       <li>
         <div class="video-cell">
-          <script type="text/javascript" charset="utf-8" src="https://www.mgstage.com/js/mgs_sample_movie.js?p=ABF-378&amp;r=1&amp;c=XZ4I8TM2JZKYADNNPGXZCNSA8M"></script>
-        </div>
-        <p class="cell-text">俺に沼ってる最高の女。<br>-男本位の避妊なし中出しSEX- 河合あすな</p>
-      </li>
-      <li>
-        <div class="video-cell">
-          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=nagst00026/size=1280_720/"
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=mimk00168/size=1280_720/"
                   scrolling="no" frameborder="0" allowfullscreen
                   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                   referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
         </div>
-        <p class="cell-text">【配信限定】抱き心地のいいムッチリ若妻<br>水瀬さな ベスト</p>
+        <p class="cell-text">1000円カットのおネエさんにスいてもらう本。3 実写版<br>1000円カットのおネエさんにスいてもらう本。</p>
       </li>
       <li>
         <div class="video-cell">
-          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=snos00371/size=1280_720/"
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=midv00670/size=1280_720/"
                   scrolling="no" frameborder="0" allowfullscreen
                   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                   referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
         </div>
-        <p class="cell-text">河北彩花の素の優しさと思いやり特化<br>関東巡行 筆おろしドキュメント</p>
+        <p class="cell-text">帰省先のド田舎で僕の東京カノジョに嫉妬した幼馴染の澪に汗だくジェラシ―淫語で精子ぶっこ抜かれた…夏の思い出。 石川澪<br>石川澪</p>
+      </li>
+      <li>
+        <div class="video-cell">
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=sone00224/size=1280_720/"
+                  scrolling="no" frameborder="0" allowfullscreen
+                  allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+                  referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
+        </div>
+        <p class="cell-text">ド級新人‘倉木華’の敏感長身ボディを更に！とことん！めちゃイキ性開発3本番！初体験スペシャル<br>倉木華</p>
       </li>
 
       <!-- ---------- 3段目 ---------- -->
       <li>
         <div class="video-cell">
-          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=snos00409/size=1280_720/"
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=ssis00839/size=1280_720/"
                   scrolling="no" frameborder="0" allowfullscreen
                   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                   referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
         </div>
-        <p class="cell-text">私の知らないエッチ、研修を受けさせてください！‘新卒’AV女優の職業初体験3本番 人生初めて尽くしで、めちゃイキまくりSpecial<br>星空ねる</p>
+        <p class="cell-text">従順かつ性的な美麗Mペット 河北彩花<br>河北彩花（河北彩伽）</p>
       </li>
       <li>
         <div class="video-cell">
-          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=adn00749/size=1280_720/"
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=h_021nps00472/size=1280_720/"
                   scrolling="no" frameborder="0" allowfullscreen
                   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                   referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
         </div>
-        <p class="cell-text">ボーイッシュな隠れ巨乳の女友達を異性として意識してしまった僕。<br>美園和花</p>
+        <p class="cell-text">ガチナンパ！ 結婚式帰りの女性がお口だけでコンドーム装着に挑戦！妊娠願望が強くなって最後はゴムを外して何度も中出し懇願！<br>ガチナンパ！（ピーターズ）</p>
       </li>
       <li>
         <div class="video-cell">
-          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=ksat00102/size=1280_720/"
+          <iframe src="https://www.dmm.co.jp/litevideo/-/part/=/affi_id=NUBh0jCpE9kc-001/cid=1sdjs00364/size=1280_720/"
                   scrolling="no" frameborder="0" allowfullscreen
                   allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
                   referrerpolicy="no-referrer-when-downgrade" loading="lazy"></iframe>
         </div>
-        <p class="cell-text">「おばさんでも抱いてくれる？」<br>近所のエロい人妻に種付けした話し。</p>
+        <p class="cell-text">人事部の休日 in 川越 与田ひかげ<br>与田ひかげ</p>
       </li>
-
-      <!-- 4段目以降は、この下に <li> を足していくだけ -->
 
     </ul>
     <!-- ================== STAGE END ================== -->
